@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'commander/import'
+require 'yaml'
+require_relative '../lib/sense_of_place'
+
+program :version, '0.0.1'
+program :description, 'Helps you create ~/.places.yml file.'
+ 
+command :remember do |c|
+  c.syntax = 'sense_of_place remember'
+  c.summary = 'Displays YAML snippet!'
+  c.option '--name NAME', String, 'Sets the name!'
+  c.description = ''
+  c.action do |args, options|
+
+    data = { }
+    data[:name] = options.name if options.name
+    data.merge!(SenseOfPlace.current_place_information)
+
+    puts YAML.dump([data])
+
+  end
+end
+
+command :identify do |c|
+  c.action do |args, options|
+    p SenseOfPlace.get_place
+  end
+end
+
+default_command :identify
+
+
+
